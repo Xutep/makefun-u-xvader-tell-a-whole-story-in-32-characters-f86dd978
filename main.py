@@ -23,10 +23,13 @@ NAME = "MyExTookTheRouterAndTheDog"
 
 def main() -> None:
     assert 1 <= len(NAME) <= 32, "name must be 1-32 characters"
+    assert len(NAME.encode("utf-8")) <= 32, "name must fit the 32-octet SSID limit"
     assert NAME.strip() == NAME and NAME, "name must not be only whitespace"
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8") as f:
         f.write(NAME)
+    with open("/output/entry.txt", encoding="utf-8") as f:
+        assert f.read() == NAME, "round-trip check: written name must match"
 
 
 if __name__ == "__main__":
